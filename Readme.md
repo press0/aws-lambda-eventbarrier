@@ -1,45 +1,17 @@
 
 
 
-<!-- PROJECT SHIELDS -->
-<!--
-*** I'm using markdown "reference style" links for readability.
-*** Reference links are enclosed in brackets [ ] instead of parentheses ( ).
-*** See the bottom of this document for the declaration of the reference variables
-*** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
-*** https://www.markdownguide.org/basic-syntax/#reference-style-links
--->
-[![Contributors][contributors-shield]][contributors-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
-
-
-
-
 <!-- TABLE OF CONTENTS -->
 <details open="open">
   <summary>Table of Contents</summary>
   <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
+    <li><a href="#Introduction">Introduction</a></li>
+     <li><a href="#prerequisites">Prerequisites</a></li>
+     <li><a href="#installation">Installation</a></li>
     <li><a href="#usage">Usage</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
     <li><a href="#acknowledgements">Acknowledgements</a></li>
   </ol>
 </details>
@@ -69,11 +41,11 @@ The following AWS services will be configured and deployed from the command line
 * [AWS CloudWatch](https://aws.amazon.com/cloudwatch/)
 
 
-## Getting Started
+## Prerequisites
 
 Python, an AWS account, and the AWS CLI are needed to run this project.
 
-### Installation
+## Installation
 
 1. Clone the repo
    ```sh
@@ -106,7 +78,7 @@ Python, an AWS account, and the AWS CLI are needed to run this project.
         ]
    }
 
-4. UNIT TESTS. Verify the lambda function logic and validate your event barrier configuration 
+4. Unit tests. Verify the lambda function logic and validate your event barrier configuration 
    ```sh
    python -m pip pytest
    ```
@@ -145,25 +117,25 @@ Python, an AWS account, and the AWS CLI are needed to run this project.
 11. create an event notification binding S3 create events to the lambda function
    ```sh
    ```
-12. Now the AWS Lambda event barriers are ready to integration tested. The following commands will upload test files to the respective prefixes of each event barrier.
-    The log file will be monitored to verify the Event Barrier condition. 
+12. AWS Lambda event barrier integration testing. The following commands upload test files to the respective prefixes of each event barrier.
+    The log file verifies the Event Barrier condition. 
    ```sh
 
 
    ```
 
-## Usage
+#### Usage
 
 Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
 
 
 
-## Roadmap
+#### Roadmap
 
 See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a list of proposed features (and known issues).
 
 
-## Contributing
+#### Contributing
 
 Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
@@ -176,7 +148,7 @@ Contributions are what make the open source community such an amazing place to b
 
 
 <!-- LICENSE -->
-## License
+#### License
 
 Distributed under the MIT License. See `LICENSE` for more information.
 
@@ -184,5 +156,5 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 
 <!-- ACKNOWLEDGEMENTS -->
-## Acknowledgements
+#### Acknowledgements
 
