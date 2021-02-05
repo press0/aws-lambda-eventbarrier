@@ -64,7 +64,7 @@ def lambda_handler(event, context):
 
 
 if __name__ == '__main__':
-    with open('config/eventbarrier_test.json') as f:
+    with open('tests/eventbarrier_test.json') as f:
         event: dict = json.load(f)
 
     lambda_handler(event, "stub")
