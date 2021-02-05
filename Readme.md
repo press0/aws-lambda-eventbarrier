@@ -8,8 +8,8 @@
     <li><a href="#Introduction">Introduction</a></li>
      <li><a href="#prerequisites">Prerequisites</a></li>
      <li><a href="#installation">Installation</a></li>
-     <li><a href="#Unit%20tests">Unit tests</a></li>
-     <li><a href="#Intergation%20tests">Intergation tests</a></li>
+     <li><a href="#Unit">Unit tests</a></li>
+     <li><a href="#Integration">Integration tests</a></li>
     <li><a href="#usage">Usage</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
