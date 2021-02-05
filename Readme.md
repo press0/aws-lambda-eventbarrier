@@ -173,9 +173,9 @@ Python, an AWS account, and the AWS CLI are needed to run this project.
    ```
 
 
-12. AWS Lambda event barrier integration testing. 
-    The following commands upload test files to the respective prefixes of each event barrier.
-    The log file verifies the Event Barrier condition. 
+12. Integration testing. 
+    The following commands upload a file to the respective prefix of each event barrier.
+    Then AWS CloudWatch verifies the event barrier conditions. 
    ```sh
 
 
