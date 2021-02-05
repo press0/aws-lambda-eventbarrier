@@ -8,6 +8,8 @@
     <li><a href="#Introduction">Introduction</a></li>
      <li><a href="#prerequisites">Prerequisites</a></li>
      <li><a href="#installation">Installation</a></li>
+     <li><a href="#Unit tests">Unit tests</a></li>
+     <li><a href="#Intergation tests">Intergation tests</a></li>
     <li><a href="#usage">Usage</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
@@ -80,16 +82,12 @@ Python, an AWS account, and the AWS CLI are needed to run this project.
         ]
    }
 
-4. Unit tests. Verify the lambda function logic and validate your event barrier configuration 
-   ```sh
-   python -m pip pytest
-   ```
-5. build the lambda function zip file
+4. build the lambda function zip file
    ```sh
    zip function.zip eventbarrier.py eventbarrier.json 
    ```
 
-6. create the lambda function.  Replace the 12 hash characters with your AWS account number.
+5. create the lambda function.  Replace the 12 hash characters with your AWS account number.
 
    ```sh
    aws lambda create-function --function-name eventbarrier \
@@ -98,20 +96,20 @@ Python, an AWS account, and the AWS CLI are needed to run this project.
          --handler eventbarrier.lambda_handler \
          --role arn:aws:iam::############:role/eventbarrier 
    ```
-7. update lambda function code as needed
+6. update lambda function code as needed
    ```sh
    aws lambda update-function-code \
          --function-name eventbarrier \
          --zip-file fileb://function.zip
    ```
 
-8. create an S3 bucket and a prefix
+7. create an S3 bucket and a prefix
    ```sh
    aws s3 rb s3://eventbarrier
    
 
    ```
-9. create an IAM policy with minimum required permissions
+8. create an IAM policy with minimum required permissions
    ```json
 
    {
@@ -142,12 +140,12 @@ Python, an AWS account, and the AWS CLI are needed to run this project.
    }
    ```
 
-10. create an IAM role
+9. create an IAM role
    ```sh
    aws iam create-role --role-name eventbarrier --assume-role-policy-document file://eventbarrier-policy.json
 
    ```
-11. create an event notification binding S3 create events to the lambda function
+10. create an event notification binding S3 create events to the lambda function
     the notification can be creates 2 ways:
     - manually: s3 console > bucket properties tab > create event event notification
     - aws cli
@@ -172,8 +170,13 @@ Python, an AWS account, and the AWS CLI are needed to run this project.
 
    ```
 
+## Unit tests
+Verify the lambda function logic and validate your event barrier configuration
+   ```sh
+   python -m pip pytest
+   ```
 
-12. Integration testing. 
+## Integration tests
     The following commands upload a file to the respective prefix of each event barrier.
     Then AWS CloudWatch verifies the event barrier conditions. 
    ```sh
