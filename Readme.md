@@ -21,19 +21,21 @@
 ## Introduction
 
 
-Barriers and Latches are a common synchronisation mechanism that enables 
-a dependent thread to wait upon independent threads or events. 
+Barriers and Latches are synchronisation mechanisms that enable 
+a dependent thread to wait upon independent events. 
+
+
 * C++: std::barrier, std::latch
 * Java: [CyclicBarrier](https://docs.oracle.com/en/java/javase/15/docs/api/java.base/java/util/concurrent/CyclicBarrier.html), [CountDownLatch](https://docs.oracle.com/en/java/javase/15/docs/api/java.base/java/util/concurrent/CountDownLatch.html)
 
 Lambda functions depend on independent events too.
 
 This project implements a generic Event Barrier as an AWS Lambda function.
-The AWS Lambda function is expected to wait until all independent events have arrived.
+The Lambda function waits until all independent events have arrived.
 AWS S3 is used for state management.
 
 
-The following AWS services will be configured and deployed from the command line 
+These AWS services are configured and deployed from the command line 
 
 * [AWS Lambda](https://aws.amazon.com/lambda/)
 * [AWS S3](https://aws.amazon.com/s3/)
@@ -91,33 +93,88 @@ Python, an AWS account, and the AWS CLI are needed to run this project.
 
    ```sh
    aws lambda create-function --function-name eventbarrier \
-   --runtime python3.8 \
-   --zip-file fileb://function.zip \
-   --handler eventbarrier.lambda_handler \
-   --role arn:aws:iam::############:role/eventbarrier 
+         --runtime python3.8 \
+         --zip-file fileb://function.zip \
+         --handler eventbarrier.lambda_handler \
+         --role arn:aws:iam::############:role/eventbarrier 
    ```
-7. update the lambda function as needed
+7. update lambda function code as needed
    ```sh
    aws lambda update-function-code \
-   --function-name eventbarrier \
-   --zip-file fileb://function.zip
+         --function-name eventbarrier \
+         --zip-file fileb://function.zip
    ```
 
 8. create an S3 bucket and a prefix
    ```sh
-   ```
+   aws s3 rb s3://eventbarrier
+   
 
+   ```
 9. create an IAM policy with minimum required permissions
-   ```sh
+   ```json
+
+   {
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": [
+                "s3:GetObject",
+                "logs:CreateLogStream",
+                "logs:CreateLogGroup",
+                "logs:PutLogEvents"
+            ],
+            "Resource": [
+                "arn:aws:s3:::eventbarrier/*",
+                "arn:aws:logs:*:*:*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:ListBucket"
+            ],
+            "Resource": "arn:aws:s3:::eventbarrier"
+        }
+    ]
+   }
    ```
 
 10. create an IAM role
    ```sh
+   aws iam create-role --role-name eventbarrier --assume-role-policy-document file://eventbarrier-policy.json
+
    ```
 11. create an event notification binding S3 create events to the lambda function
-   ```sh
+    the notification can be creates 2 ways:
+    - manually: s3 console > bucket properties tab > create event event notification
+    - aws cli
+```sh
+    aws s3api put-bucket-notification-configuration \
+        --bucket eventbarrier 
+        --notification-configuration file://notification.json
    ```
-12. AWS Lambda event barrier integration testing. The following commands upload test files to the respective prefixes of each event barrier.
+   with notification.json like:
+
+   ```json
+       {
+         "TopicConfigurations": [
+            {
+               "TopicArn": "arn:aws:sns:us-west-2:123456789012:s3-notification-topic",
+               "Events": [
+                  "s3:ObjectCreated:*"
+               ]
+            }
+         ]
+      }
+
+   ```
+
+
+12. AWS Lambda event barrier integration testing. 
+    The following commands upload test files to the respective prefixes of each event barrier.
     The log file verifies the Event Barrier condition. 
    ```sh
 
@@ -126,18 +183,16 @@ Python, an AWS account, and the AWS CLI are needed to run this project.
 
 #### Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
 
 
 #### Roadmap
 
-See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a list of proposed features (and known issues).
+See the [open issues](https://github.com/press0/aws-lambda-eventbarrier/issues) for a list of proposed features (and known issues).
 
 
 #### Contributing
 
-Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+Contributions are what make the open source community such an amazing place to be learn, inspire, and create.
 
 1. Fork the Project
 2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
