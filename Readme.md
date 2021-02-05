@@ -145,9 +145,8 @@ Python, an AWS account, and the AWS CLI are needed to run this project.
    aws iam create-role --role-name eventbarrier --assume-role-policy-document file://eventbarrier-policy.json
 
    ```
-10. create an event notification binding S3 create events to the lambda function
-    the notification can be creates 2 ways:
-    - manually: s3 console > bucket properties tab > create event event notification
+10. create an event notification binding S3 events to the eventbarrier lambda function in 2 ways:
+    - manual: s3 console > bucket properties tab > create event notification
     - aws cli
 ```sh
     aws s3api put-bucket-notification-configuration \
@@ -171,14 +170,14 @@ Python, an AWS account, and the AWS CLI are needed to run this project.
    ```
 
 ## Unit tests
-Verify the lambda function logic and validate your event barrier configuration
+Verify lambda function logic and validate your custom event barrier configuration in eventbarrier.json
    ```sh
    python -m pip pytest
    ```
 
 ## Integration tests
-    The following commands upload a file to the respective prefix of each event barrier.
-    Then AWS CloudWatch verifies the event barrier conditions. 
+Upload files to the respective prefix of each event barrier.
+AWS CloudWatch verifies the event barrier conditions. 
    ```sh
 
 
