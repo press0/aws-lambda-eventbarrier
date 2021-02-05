@@ -32,22 +32,24 @@ a dependent thread to wait upon independent events.
 
 Lambda functions depend on independent events too.
 
-This project implements a generic Event Barrier as an AWS Lambda function.
+This project implements generic Event Barriers for Lambda functions.
 The Lambda function waits until all independent events have arrived.
 AWS S3 is used for state management.
 
+Along the way, we will implement Lambda function 
+unit tests, integration tests, and load tests for over 100 Event Barriers. 
 
-These AWS services are configured and deployed from the command line 
+## Prerequisites
+
+Python, an AWS account, and the AWS CLI are needed to run this project.
+
+These AWS services are configured and deployed from the command line
 
 * [AWS Lambda](https://aws.amazon.com/lambda/)
 * [AWS S3](https://aws.amazon.com/s3/)
 * [AWS IAM](https://aws.amazon.com/iam/)
 * [AWS CloudWatch](https://aws.amazon.com/cloudwatch/)
 
-
-## Prerequisites
-
-Python, an AWS account, and the AWS CLI are needed to run this project.
 
 ## Installation
 
@@ -56,15 +58,15 @@ Python, an AWS account, and the AWS CLI are needed to run this project.
    git clone https://github.com/press0/aws-eventbarrier.git
    ```
 
-2. create a virtual environment
+1. create a virtual environment
    ```sh
    python -m venv venv
    ```
-2. install requirements
+1. install requirements
    ```sh
    python -m pip install -r requirements.txt
    ```
-3. define event barriers in a configuration file.  
+1. define event barriers in a configuration file.  
    ```json
    {
         "event-barrier-0": [
@@ -82,12 +84,12 @@ Python, an AWS account, and the AWS CLI are needed to run this project.
         ]
    }
 
-4. build the lambda function zip file
+1. build the lambda function zip file
    ```sh
-   zip function.zip eventbarrier.py eventbarrier.json 
+   zip function.zip eventbarrier.py config/eventbarrier.json 
    ```
 
-5. create the lambda function.  Replace the 12 hash characters with your AWS account number.
+1. create the lambda function.  Replace the 12 hash characters with your AWS account number.
 
    ```sh
    aws lambda create-function --function-name eventbarrier \
@@ -96,20 +98,20 @@ Python, an AWS account, and the AWS CLI are needed to run this project.
          --handler eventbarrier.lambda_handler \
          --role arn:aws:iam::############:role/eventbarrier 
    ```
-6. update lambda function code as needed
+1. update lambda function code as needed
    ```sh
    aws lambda update-function-code \
          --function-name eventbarrier \
          --zip-file fileb://function.zip
    ```
 
-7. create an S3 bucket and a prefix
+1. create an S3 bucket and a prefix
    ```sh
    aws s3 rb s3://eventbarrier
    
 
    ```
-8. create an IAM policy with minimum required permissions
+1. create an IAM policy with minimum required permissions
    ```json
 
    {
@@ -140,18 +142,20 @@ Python, an AWS account, and the AWS CLI are needed to run this project.
    }
    ```
 
-9. create an IAM role
+1. create an IAM role
    ```sh
-   aws iam create-role --role-name eventbarrier --assume-role-policy-document file://eventbarrier-policy.json
+   aws iam create-role \
+      --role-name eventbarrier 
+      --assume-role-policy-document file://config/eventbarrier-policy.json
 
    ```
-10. create an event notification binding S3 events to the eventbarrier lambda function in 2 ways:
-    - manual: s3 console > bucket properties tab > create event notification
-    - aws cli
+1. create an event notification in one of two ways:
+    - manually; s3 console > bucket properties tab > create event notification
+    - automated; aws cli
 ```sh
     aws s3api put-bucket-notification-configuration \
         --bucket eventbarrier 
-        --notification-configuration file://notification.json
+        --notification-configuration file://config/notification.json
    ```
    with notification.json like:
 
