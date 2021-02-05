@@ -27,7 +27,7 @@ Barriers and Latches are synchronisation mechanisms that enable
 a dependent thread to wait upon independent events. 
 
 
-* C++: std::barrier, std::latch
+* C++: [std::barrier](https://en.cppreference.com/w/cpp/thread/barrier), [std::latch](https://en.cppreference.com/w/cpp/thread/latch)
 * Java: [CyclicBarrier](https://docs.oracle.com/en/java/javase/15/docs/api/java.base/java/util/concurrent/CyclicBarrier.html), [CountDownLatch](https://docs.oracle.com/en/java/javase/15/docs/api/java.base/java/util/concurrent/CountDownLatch.html)
 
 Lambda functions depend on independent events too.
