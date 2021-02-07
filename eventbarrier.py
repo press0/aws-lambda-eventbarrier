@@ -28,26 +28,26 @@ def lambda_handler(event, context):
             else:
                 map_prefix_to_barrier[value] = list([item])
 
-    barrier: str = None
+    event_barrier: str = None
     for item in map_prefix_to_barrier:
         if event_prefix.startswith(item):
-            barrier = map_prefix_to_barrier[item][0]
+            event_barrier = map_prefix_to_barrier[item][0]
             break
 
     print(f'map_barrier_to_prefixes {map_barrier_to_prefixes}')
     print(f'map_prefix_to_barrier {map_prefix_to_barrier}')
     print(f'new_event {event_key}')
 
-    if barrier is None:
-        print(f'event {event_key} is not associated with any barrier')
+    if event_barrier is None:
+        print(f'event {event_key} is not associated with an event barrier')
         return
     else:
-        print(f'event {event_key} is associated with barrier {barrier} ')
+        print(f'event {event_key} is associated with event barrier {event_barrier} ')
 
-    print(f'determine if barrier {barrier} condition is met')
+    print(f'determine if event barrier {event_barrier} condition is met')
 
     missing: bool = False
-    for prefix in list(map_barrier_to_prefixes[barrier]):
+    for prefix in list(map_barrier_to_prefixes[event_barrier]):
         objects = list(bucket.objects.filter(Prefix=prefix))
         print(f'prefix {prefix} has {len(objects)} objects')
 
@@ -58,9 +58,9 @@ def lambda_handler(event, context):
             missing = True
 
     if missing:
-        print(f'barrier condition not met for {barrier}')
+        print(f'condition not met for event barrier {event_barrier}')
     else:
-        print(f'barrier condition is  met for {barrier}')
+        print(f'condition is  met for event barrier {event_barrier}')
 
 
 if __name__ == '__main__':
