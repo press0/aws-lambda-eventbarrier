@@ -176,7 +176,7 @@ These AWS services are configured and deployed from the command line
 ## Unit tests
 Verify lambda function logic and validate your custom event barrier configuration in eventbarrier.json
    ```sh
-   python -m pip pytest
+   python eventbarrier_test.py
    ```
 
 ## Integration tests
