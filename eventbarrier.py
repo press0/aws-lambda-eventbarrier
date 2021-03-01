@@ -4,14 +4,30 @@ from typing import Dict, List
 
 import boto3
 
+s3_client = boto3.client('s3')
+
+
+def set_s3_client(mock_s3_client: object):
+    global s3_client
+    s3_client = mock_s3_client
+
+
+def s3_head(s3bucket_nm: str, object_key: str):
+    try:
+        s3_client.head_object(Bucket=s3bucket_nm, Key=object_key)
+    except Exception as e:
+        print(f'Object: {object_key} was not found in {s3bucket_nm} S3 bucket.:\n {e}')
+        return False
+    else:
+        print(f'Object: {object_key} was found in {s3bucket_nm} S3 bucket.')
+        return True
+
 
 def lambda_handler(event, context):
     bucket_name = 'eventbarrier'
-    s3 = boto3.resource('s3')
-    bucket = s3.Bucket(bucket_name)
 
     print('## ENVIRONMENT VARIABLES')
-    print(os.environ)
+    # print(os.environ)
     print('## EVENT')
     print(event, context)
     event_key = event['Records'][0]['s3']['object']['key']
@@ -30,7 +46,7 @@ def lambda_handler(event, context):
 
     event_barrier: str = None
     for item in map_prefix_to_barrier:
-        if event_prefix.startswith(item):
+        if item.startswith(event_prefix):
             event_barrier = map_prefix_to_barrier[item][0]
             break
 
@@ -48,23 +64,23 @@ def lambda_handler(event, context):
 
     missing: bool = False
     for prefix in list(map_barrier_to_prefixes[event_barrier]):
-        objects = list(bucket.objects.filter(Prefix=prefix))
-        print(f'prefix {prefix} has {len(objects)} objects')
 
-        for i in range(0, len(objects)):
-            print(f'prefix {prefix} key {objects[i].key}')
+        # make object_key from prefix and event
+        object_key = prefix + "/file1.txt"
 
-        if len(objects) is 0 or objects[i].key == prefix + '/':
+        if not s3_head(bucket_name, object_key):
             missing = True
 
     if missing:
         print(f'condition not met for event barrier {event_barrier}')
+        return False
     else:
         print(f'condition is  met for event barrier {event_barrier}')
+        return True
 
 
 if __name__ == '__main__':
-    with open('tests/eventbarrier_test.json') as f:
+    with open('zzzz/eventbarrier_test.json') as f:
         event: dict = json.load(f)
 
     lambda_handler(event, "stub")
